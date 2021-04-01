@@ -24,7 +24,7 @@ const signup = async (req, res = response) => {
 
         const token = await generateJWT(user.id);
 
-        res.json({
+        res.status(200).json({
             ok: true,
             user,
             token
@@ -61,7 +61,7 @@ const signin = async (req, res = response) => {
 
         const token = await generateJWT(user.id);
 
-        res.json({
+        res.status(200).json({
             ok: true,
             user,
             token
@@ -77,7 +77,7 @@ const signin = async (req, res = response) => {
 const renewJWT = async (req, res = response) => {
     let user = await User.findById(req.uid);
     const token = await generateJWT(user.id);
-    res.json({
+    res.status(200).json({
         ok: true,
         user,
         token
