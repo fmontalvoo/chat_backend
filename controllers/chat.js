@@ -1,3 +1,5 @@
+const { response } = require("express");
+
 const Chat = require('../models/chat.model');
 
 const saveMessage = async (payload) => {
@@ -12,4 +14,21 @@ const saveMessage = async (payload) => {
     }
 }
 
-module.exports = { saveMessage }
+const getChat = async (req, res = response) => {
+
+    const myUID = req.uid;
+    const fromUID = req.params.from;
+
+    const chats = await Chat.find({
+        $or: [{ from: myUID, to: fromUID }, { from: fromUID, to: myUID }]
+    }).sort({ createdAt: 'desc' })
+        .limit(35);
+
+    res.status(200).json({
+        ok: true,
+        chats
+    });
+
+}
+
+module.exports = { saveMessage, getChat }

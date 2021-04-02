@@ -19,6 +19,7 @@ app.use(express.static(public));
 // Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/users', require('./routes/users'));
+app.use('/api/chats', require('./routes/chats'));
 
 // Socket server
 const server = require('http').createServer(app);
