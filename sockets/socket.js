@@ -2,6 +2,7 @@ const { io } = require('../index');
 
 const { verificarJWT } = require('../helpers/jwt');
 const { userOnline, userOffline } = require('../controllers/user.status');
+const { saveMessage } = require('../controllers/chat');
 
 // Socket
 io.on('connection', client => {
@@ -13,6 +14,13 @@ io.on('connection', client => {
     if (!valido) return client.disconnect();
 
     userOnline(uid);
+
+    client.join(uid);
+
+    client.on('private-chat', async (payload) => {
+        await saveMessage(payload);
+        io.to(payload.to).emit('private-chat', payload);
+    });
 
     // client.on('event', data => { /* … */ });
     client.on('disconnect', () => {
